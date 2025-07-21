@@ -5,18 +5,18 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.sivalabs</groupId>
-    <artifactId>spring-boot-modulith-demo</artifactId>
+    <groupId>io.lacrobate</groupId>
+    <artifactId>spring-modulith-kafka</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
     <modules>
         <module>monolith</module>
-        <module>modulith</module>
+        <module>kafka-consumer</module>
     </modules>
 </project>

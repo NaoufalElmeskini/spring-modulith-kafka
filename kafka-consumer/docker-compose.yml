@@ -1,0 +1,12 @@
+services:
+  product-service:
+    container_name: product-api
+    build: .
+    ports:
+      - "8080:8080"
+
+  price-service:
+    container_name: price-api
+    build: ../api2/
+    ports:
+      - "8082:8082"
