@@ -1,0 +1,13 @@
+spring:
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+  application:
+    name: kafka-consumer
+
+server:
+  port: 8082
+
+logging:
+  level:
+    com.example.consumer: INFO
+    org.springframework.kafka: INFO
