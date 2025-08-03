@@ -42,22 +42,22 @@ services:
 #      KAFKA_CLUSTERS_0_NAME: local
 #      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
 
-##   Application Producer
-#  kafka-producer:
-#    build: ../kafka-producer
-#    container_name: kafka-producer
-#    depends_on:
-#      - kafka
-#    environment:
-#      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-#    restart: unless-stopped
+#   Application Producer
+  kafka-producer:
+    build: kafka-producer/
+    container_name: kafka-producer
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    restart: unless-stopped
 
-##   Application Consumer
-#  kafka-consumer:
-#    build: ../kafka-consumer
-#    container_name: kafka-consumer
-#    depends_on:
-#      - kafka
-#    environment:
-#      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
-#    restart: unless-stopped
+#   Application Consumer
+  kafka-consumer:
+    build: kafka-consumer/
+    container_name: kafka-consumer
+    depends_on:
+      - kafka
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+    restart: unless-stopped
