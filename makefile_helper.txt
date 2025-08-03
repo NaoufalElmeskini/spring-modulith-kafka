@@ -1,0 +1,75 @@
+# Makefile pour le TP Kafka
+.PHONY: help build start stop clean logs topic-create topic-info
+
+help: ## Affiche l'aide
+	@echo "🎯 TP Kafka - Commandes disponibles :"
+	@echo ""
+	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
+
+build: ## Build les applications Java
+	@echo "🔨 Build du Producer..."
+	cd kafka-producer && mvn clean package -DskipTests
+	@echo "🔨 Build du Consumer..."
+	cd kafka-consumer && mvn clean package -DskipTests
+	@echo "✅ Build terminé !"
+
+start-infra: ## Démarre Kafka et Zookeeper
+	@echo "🚀 Démarrage de l'infrastructure Kafka..."
+	docker-compose up -d zookeeper kafka kafka-ui
+	@echo "⏳ Attente du démarrage de Kafka..."
+	sleep 30
+
+topic-create: ## Crée le topic sensor-data
+	@echo "📝 Création du topic 'sensor-data'..."
+	chmod +x create-topic.sh
+	./create-topic.sh
+
+start-apps: ## Démarre les applications Producer et Consumer
+	@echo "🚀 Démarrage des applications..."
+	docker-compose up -d kafka-producer kafka-consumer
+	@echo "✅ Applications démarrées !"
+
+start: build start-infra topic-create start-apps ## Démarre tout le projet
+	@echo "🎉 Projet démarré avec succès !"
+	@echo "📊 Kafka UI disponible sur : http://localhost:8080"
+	@echo "📝 Consultez les logs avec : make logs"
+
+stop: ## Arrête tous les containers
+	@echo "🛑 Arrêt des containers..."
+	docker-compose down
+	@echo "✅ Containers arrêtés !"
+
+clean: stop ## Nettoie tout (containers, volumes, images)
+	@echo "🧹 Nettoyage complet..."
+	docker-compose down -v --rmi local
+	@echo "✅ Nettoyage terminé !"
+
+logs: ## Affiche les logs du Producer et Consumer
+	@echo "📋 Logs en temps réel (Ctrl+C pour arrêter) :"
+	docker-compose logs -f kafka-producer kafka-consumer
+
+logs-producer: ## Affiche les logs du Producer uniquement
+	docker logs -f kafka-producer
+
+logs-consumer: ## Affiche les logs du Consumer uniquement
+	docker logs -f kafka-consumer
+
+logs-kafka: ## Affiche les logs de Kafka
+	docker logs -f kafka
+
+topic-info: ## Affiche les infos du topic
+	@echo "📋 Informations sur le topic 'sensor-data' :"
+	docker exec kafka kafka-topics --describe --topic sensor-data --bootstrap-server localhost:9092
+
+topic-messages: ## Affiche les messages du topic (depuis le début)
+	@echo "📨 Messages du topic 'sensor-data' :"
+	docker exec kafka kafka-console-consumer --topic sensor-data --bootstrap-server localhost:9092 --from-beginning --max-messages 10
+
+status: ## Affiche l'état des containers
+	@echo "📊 État des containers :"
+	docker-compose ps
+
+restart: ## Redémarre les applications
+	@echo "🔄 Redémarrage des applications..."
+	docker-compose restart kafka-producer kafka-consumer
+	@echo "✅ Applications redémarrées !"
