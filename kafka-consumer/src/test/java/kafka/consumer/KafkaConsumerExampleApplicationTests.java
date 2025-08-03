@@ -1,4 +1,4 @@
-package spring_rest_api;
+package kafka.consumer;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

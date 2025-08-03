@@ -1,4 +1,4 @@
-package spring_rest_api;
+package kafka.consumer;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
